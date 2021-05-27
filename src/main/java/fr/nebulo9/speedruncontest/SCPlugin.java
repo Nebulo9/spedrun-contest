@@ -32,7 +32,6 @@ import fr.nebulo9.speedruncontest.commands.RunnersCMD;
 /**
  * Main Plugin class.
  * @author Nebulo9
- *
  */
 public class SCPlugin extends JavaPlugin implements Listener{
 

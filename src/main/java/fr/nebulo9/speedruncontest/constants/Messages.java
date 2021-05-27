@@ -1,7 +1,10 @@
 package fr.nebulo9.speedruncontest.constants;
 
 import org.bukkit.ChatColor;
-
+/**
+ * An Enum to stores the constant messages that can be easily used in the entire plugin.
+ * @author Nebulo9
+ */
 public enum Messages {
 	
 	PLUGIN_ENABLED("SpeedrunContest enabled."),
