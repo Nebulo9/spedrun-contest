@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SimpleProject" default="CreateJar" basedir = ".">
+ 
+	<property name="project.projectname" value="SpeedrunContest"/>
+    <basename file="${basedir}" property="project.projectname"/>
+    <property name="bin" location="bin"/>
+
+    <target name="clean" description="Cleans project">
+        <delete file="${bin}\${project.projectname}.jar"/>
+    </target>
+ 
+    <target name="CreateJar" description="Create a jar for the project" depends="clean">
+        <jar destfile="${bin}\${project.projectname}.jar">
+           <fileset dir="${basedir}">
+              <include name="**.yml"/>
+           </fileset>
+           <fileset dir="${basedir}\bin">
+               <include name="**"/>
+           </fileset>
+        </jar>
+    </target>
+</project>
