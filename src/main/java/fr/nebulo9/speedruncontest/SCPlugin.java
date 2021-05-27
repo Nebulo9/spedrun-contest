@@ -29,6 +29,11 @@ import fr.nebulo9.speedruncontest.commands.GamestopCMD;
 import fr.nebulo9.speedruncontest.commands.RunnerCMD;
 import fr.nebulo9.speedruncontest.commands.RunnersCMD;
 
+/**
+ * Main Plugin class.
+ * @author Nebulo9
+ *
+ */
 public class SCPlugin extends JavaPlugin implements Listener{
 
 	private static Set<UUID> RUNNERS = new HashSet<UUID>();
@@ -67,6 +72,10 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		}
 	}
 	
+	/**
+	 * Changing the drop of Gold Ores and Iron Ores to their ingots.
+	 * @param e the {@link org.bukkit.event.block.BlockBreakEvent Event} provided by a player.
+	 */
 	@EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         Block block = e.getBlock();
@@ -94,10 +103,18 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		p.setScoreboard(sb);
 	}
 
+	/**
+	 * Returns the {@link java.util.Set Set} of the runners' {@link java.util.UUID UUID}.
+	 * @return a {@link java.util.Set Set} of {@link java.util.UUID UUID}s.
+	 */
 	public static Set<UUID> getRunners() {
 		return RUNNERS;
 	}
 	
+	/**
+	 * Adds the {@link java.util.UUID UUID} of a player to the runners.
+	 * @param uuid the {@link java.util.UUID UUID} of the player.
+	 */
 	public static void addRunner(UUID uuid) {
 		String name = Bukkit.getPlayer(uuid).getName();
 		Bukkit.getPlayer(uuid).setDisplayName(ChatColor.GREEN + name + ChatColor.RESET);
@@ -105,6 +122,10 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		RUNNERS.add(uuid);
 	}
 	
+	/**
+	 * Removes the {@link java.util.UUID UUID} of a player to the runners.
+	 * @param uuid the {@link java.util.UUID UUID} of the player.
+	 */
 	public static void removeRunner(UUID uuid) {
 		String name = Bukkit.getPlayer(uuid).getName();
 		Bukkit.getPlayer(uuid).setDisplayName(ChatColor.RESET + name + ChatColor.RESET);
@@ -124,10 +145,18 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		SPECTATORS.remove(uuid);
 	}
 
+	/**
+	 * Returns the boolean status of the game.
+	 * @return a boolean.
+	 */
 	public static boolean isGAME_STARTED() {
 		return GAME_STARTED;
 	}
 
+	/**
+	 * Sets the status of the game.
+	 * @param gameStatus the boolean status to set.
+	 */
 	public static void setGAME_STARTED(boolean gameStatus) {
 		GAME_STARTED = gameStatus;
 	}
