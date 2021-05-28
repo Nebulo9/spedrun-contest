@@ -1,8 +1,8 @@
 name: SpeedrunContest
 main: fr.nebulo9.speedruncontest.SCPlugin
 author: Nebulo9
-version: 1.2b
-description: This plugin provides a mean to play a Speedrun contest with your friends
+version: 1.3b
+description: This plugin provides a mean to play a Speedrun contest with your friends.
 api-version: 1.16 #1.16.*
 
 commands:
@@ -22,6 +22,10 @@ commands:
       permission: src.game
       description: Stops a game.
       usage: "Usage: /gamestop"
+   gettime:
+      permission: src.admin
+      description: Gets the current time since the timer started.
+      usage: "Usage /gettime"
 
 permissions:
    src.runner:
@@ -30,6 +34,9 @@ permissions:
    src.game:
       default: op
       description: Grant access to /gamestart and /gamestop commands.
+   src.admin:
+      default: op
+      description: Grant access to /gettime command.
       
    src.*:
       default: op
@@ -37,3 +44,4 @@ permissions:
       children:
          src.runner: true
          src.game: true
+         src.admin: true

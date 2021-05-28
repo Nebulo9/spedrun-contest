@@ -1,6 +1,5 @@
 package fr.nebulo9.speedruncontest.tasks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.nebulo9.speedruncontest.SCPlugin;
@@ -51,9 +50,6 @@ public class TimerTask extends BukkitRunnable {
 				SECONDS_STRING = SECONDS.toString();
 			}
 			TIME = HOURS_STRING + "h " + MINUTES_STRING + "m " + SECONDS_STRING + "s";
-			if(SECONDS == 30 || SECONDS == 0){
-				Bukkit.broadcastMessage("Time: " + TIME);
-			}
 			if(MINUTES == 2) {
 				finished = true;
 			}

@@ -4,9 +4,7 @@
   <artifactId>speedrun-contest</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   
-  <properties>
-  	<mainClass>fr.nebulo9.speedruncontest.SCPlugin</mainClass>
-  	
+  <properties>	
   	<maven.compiler.target>1.14</maven.compiler.target>
 	<maven.compiler.source>1.14</maven.compiler.source>
   </properties>

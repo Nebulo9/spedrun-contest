@@ -38,6 +38,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	private static Set<UUID> RUNNERS = new HashSet<UUID>();
 	private static Set<UUID> SPECTATORS;
 	private static boolean GAME_STARTED = false;
+	private static BukkitTask TIMER_TASK;
 	
 	@Override
 	public void onEnable(){
@@ -51,7 +52,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 			setScoreboard(p);
 		}
 		
-		BukkitTask task = new TimerTask(this).runTaskTimer(this, 0L, 20L);
+		TIMER_TASK = new TimerTask(this).runTaskTimer(this, 0L, 20L);
 		
 		getServer().getPluginManager().registerEvents(this, this);
 		
@@ -158,6 +159,10 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	 */
 	public static void setGAME_STARTED(boolean gameStatus) {
 		GAME_STARTED = gameStatus;
+	}
+
+	public static BukkitTask getTimerTask() {
+		return TIMER_TASK;
 	}
 	
 	
