@@ -50,9 +50,6 @@ public class TimerTask extends BukkitRunnable {
 				SECONDS_STRING = SECONDS.toString();
 			}
 			TIME = HOURS_STRING + "h " + MINUTES_STRING + "m " + SECONDS_STRING + "s";
-			if(MINUTES == 2) {
-				finished = true;
-			}
 		} else {
 			this.cancel();
 		}
