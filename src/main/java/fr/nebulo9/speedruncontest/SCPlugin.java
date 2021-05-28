@@ -22,14 +22,13 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
-import fr.nebulo9.speedruncontest.constants.Messages;
-import fr.nebulo9.speedruncontest.tasks.TimerTask;
 import fr.nebulo9.speedruncontest.commands.GamestartCMD;
 import fr.nebulo9.speedruncontest.commands.GamestopCMD;
-import fr.nebulo9.speedruncontest.commands.GetTimeCMD;
 import fr.nebulo9.speedruncontest.commands.RunnerCMD;
 import fr.nebulo9.speedruncontest.commands.RunnersCMD;
-import fr.nebulo9.speedruncontest.commands.StopTimeCMD;
+import fr.nebulo9.speedruncontest.commands.TimerCMD;
+import fr.nebulo9.speedruncontest.constants.Messages;
+import fr.nebulo9.speedruncontest.tasks.TimerTask;
 
 /**
  * Main Plugin class.
@@ -48,8 +47,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		getCommand("runners").setExecutor(new RunnersCMD(this));
 		getCommand("gamestart").setExecutor(new GamestartCMD());
 		getCommand("gamestop").setExecutor(new GamestopCMD());
-		getCommand("gettime").setExecutor(new GetTimeCMD());
-		getCommand("stoptime").setExecutor(new StopTimeCMD());
+		getCommand("timer").setExecutor(new TimerCMD());
 		
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {

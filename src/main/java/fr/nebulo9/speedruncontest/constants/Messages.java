@@ -23,7 +23,14 @@ public enum Messages {
 	GAME_STARTING("The game is starting."),
 	GAME_STOPPING("The game has been stopped."),
 	GAME_ALREADY_STARTED("A game is currently running."),
-	GAME_ALREADY_STOPPED("There is no game running.")
+	GAME_ALREADY_STOPPED("There is no game running."),
+	
+	TIMER_PAUSED_OR_STOPPED("The timer is already paused or stop."),
+	TIMER_PAUSED("The timer has been paused."),
+	TIMER_RESUMED("The timer has been resumed."),
+	TIMER_STOPPED("The timer has been stopped."),
+	TIMER_STARTED("The timer has been started."),
+	TIMER_STARTED_OR_PAUSED("The timer is already started or paused."),
 	
 	;
 	
