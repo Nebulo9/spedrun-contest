@@ -26,6 +26,7 @@ import fr.nebulo9.speedruncontest.constants.Messages;
 import fr.nebulo9.speedruncontest.tasks.TimerTask;
 import fr.nebulo9.speedruncontest.commands.GamestartCMD;
 import fr.nebulo9.speedruncontest.commands.GamestopCMD;
+import fr.nebulo9.speedruncontest.commands.GetTimeCMD;
 import fr.nebulo9.speedruncontest.commands.RunnerCMD;
 import fr.nebulo9.speedruncontest.commands.RunnersCMD;
 
@@ -46,6 +47,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		getCommand("runners").setExecutor(new RunnersCMD(this));
 		getCommand("gamestart").setExecutor(new GamestartCMD());
 		getCommand("gamestop").setExecutor(new GamestopCMD());
+		getCommand("gettime").setExecutor(new GetTimeCMD());
 		
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {
