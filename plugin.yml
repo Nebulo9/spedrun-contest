@@ -26,6 +26,10 @@ commands:
       permission: src.admin
       description: Gets the current time since the timer started.
       usage: "Usage /gettime"
+   stoptime:
+      permission: src.admin
+      description: Stops the timer.
+      usage: "Usage: /stoptime"
 
 permissions:
    src.runner:

@@ -16,7 +16,7 @@ public class TimerTask extends BukkitRunnable {
 	private String MINUTES_STRING;
 	private String HOURS_STRING;
 	
-	private boolean finished;
+	private static boolean FINISHED;
 	
 	public TimerTask(SCPlugin plugin) {
 		this.plugin = plugin;
@@ -24,7 +24,7 @@ public class TimerTask extends BukkitRunnable {
 	
 	@Override
 	public void run() {
-		if(!finished) {
+		if(!FINISHED) {
 			SECONDS++;
 			if(SECONDS == 60){
 				MINUTES++;
@@ -56,12 +56,12 @@ public class TimerTask extends BukkitRunnable {
 
 	}
 
-	public boolean isFinished() {
-		return finished;
+	public static boolean isFinished() {
+		return FINISHED;
 	}
 
-	public void setFinished(boolean finished) {
-		this.finished = finished;
+	public static void setFinished(boolean finished) {
+		FINISHED = finished;
 	}
 
 	public Integer getSeconds() {

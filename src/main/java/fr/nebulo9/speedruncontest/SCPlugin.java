@@ -29,6 +29,7 @@ import fr.nebulo9.speedruncontest.commands.GamestopCMD;
 import fr.nebulo9.speedruncontest.commands.GetTimeCMD;
 import fr.nebulo9.speedruncontest.commands.RunnerCMD;
 import fr.nebulo9.speedruncontest.commands.RunnersCMD;
+import fr.nebulo9.speedruncontest.commands.StopTimeCMD;
 
 /**
  * Main Plugin class.
@@ -48,6 +49,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		getCommand("gamestart").setExecutor(new GamestartCMD());
 		getCommand("gamestop").setExecutor(new GamestopCMD());
 		getCommand("gettime").setExecutor(new GetTimeCMD());
+		getCommand("stoptime").setExecutor(new StopTimeCMD());
 		
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {
