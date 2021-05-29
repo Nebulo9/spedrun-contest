@@ -45,11 +45,10 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	@Override
 	public void onEnable(){
 		saveConfig();
-		String worldName = getConfig().getString("world-name");
-		if(worldName == null) {
+		if(getConfig().getString("world-name") == null) {
 			getConfig().set("world-name", "world");
-			worldName = "world";
 		}
+		String worldName = getConfig().getString("world-name");
 		saveConfig();
 		
 		getCommand("runner").setExecutor(new RunnerCMD(this));
