@@ -40,6 +40,7 @@ public class GameCMD implements CommandExecutor {
 								} else {
 									p.setGameMode(GameMode.SPECTATOR);
 								}
+								p.sendTitle(ChatColor.RED + "Good luck !", "", 10, 3*20, 10);
 							}
 						} else {
 							sender.sendMessage(ChatColor.RED + Messages.RUNNERS_LIST_EMPTY.getMessage() + ChatColor.RESET);

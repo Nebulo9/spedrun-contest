@@ -1,7 +1,7 @@
 name: SpeedrunContest
 main: fr.nebulo9.speedruncontest.SCPlugin
 author: Nebulo9
-version: 1.3b
+version: 1.5b
 description: This plugin provides a mean to play a Speedrun contest with your friends.
 api-version: 1.16 #1.16.*
 
@@ -22,8 +22,6 @@ commands:
       permission: src.admin
       description: Pause, resume, stop and get the timer.
       usage: "Usage: /timer [get|pause|resume|stop]"
-   test:
-      permision: src.admin
 
 permissions:
    src.runner:

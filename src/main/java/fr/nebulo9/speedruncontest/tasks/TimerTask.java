@@ -45,24 +45,20 @@ public class TimerTask extends BukkitRunnable {
 				HOURS++;
 				MINUTES = 0;
 			}
-			if(HOURS < 10) {
-				HOURS_STRING = "0" + HOURS;
-			} else {
-				HOURS_STRING = HOURS.toString();
-			}
-			if(MINUTES < 10) {
-				MINUTES_STRING = "0" + MINUTES;
-			} else {
-				MINUTES_STRING = MINUTES.toString();
-			}
-			if(SECONDS < 10) {
-				SECONDS_STRING = "0" + SECONDS;
-			} else {
-				SECONDS_STRING = SECONDS.toString();
-			}
+			HOURS_STRING = formatTime(HOURS);
+			MINUTES_STRING = formatTime(MINUTES);
+			SECONDS_STRING = formatTime(SECONDS);
 			TIME = HOURS_STRING + "h " + MINUTES_STRING + "m " + SECONDS_STRING + "s";
 		}
 
+	}
+	
+	private String formatTime(Integer time) {
+		if(time < 10) {
+			return "0" + time.toString();
+		} else {
+			return time.toString();
+		}
 	}
 
 	public static int getStatus() {
