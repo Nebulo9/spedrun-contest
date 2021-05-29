@@ -22,8 +22,10 @@ public enum Messages {
 	RUNNERS_LIST_EMPTY("There are no runners."),
 	GAME_STARTING("The game is starting."),
 	GAME_STOPPING("The game has been stopped."),
+	GAME_PAUSED("The game has been paused."),
 	GAME_ALREADY_STARTED("A game is currently running."),
 	GAME_ALREADY_STOPPED("There is no game running."),
+	GAME_ALREADY_PAUSED("The game is already paused."),
 	
 	TIMER_PAUSED_OR_STOPPED("The timer is already paused or stop."),
 	TIMER_PAUSED("The timer has been paused."),

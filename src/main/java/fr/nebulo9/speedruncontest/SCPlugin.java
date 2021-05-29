@@ -12,22 +12,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 
-import fr.nebulo9.speedruncontest.commands.GamestartCMD;
-import fr.nebulo9.speedruncontest.commands.GamestopCMD;
+import fr.nebulo9.speedruncontest.commands.GameCMD;
 import fr.nebulo9.speedruncontest.commands.RunnerCMD;
 import fr.nebulo9.speedruncontest.commands.RunnersCMD;
 import fr.nebulo9.speedruncontest.commands.TimerCMD;
 import fr.nebulo9.speedruncontest.constants.Messages;
+import fr.nebulo9.speedruncontest.scoreboards.TimerScoreboard;
 import fr.nebulo9.speedruncontest.tasks.TimerTask;
 
 /**
@@ -45,16 +42,20 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	public void onEnable(){
 		getCommand("runner").setExecutor(new RunnerCMD(this));
 		getCommand("runners").setExecutor(new RunnersCMD(this));
-		getCommand("gamestart").setExecutor(new GamestartCMD());
-		getCommand("gamestop").setExecutor(new GamestopCMD());
+		getCommand("game").setExecutor(new GameCMD(this));
 		getCommand("timer").setExecutor(new TimerCMD());
 		
 		
-		for(Player p : Bukkit.getOnlinePlayers()) {
-			setScoreboard(p);
-		}
 		
-		TIMER_TASK = new TimerTask(this).runTaskTimer(this, 0L, 20L);
+		TIMER_TASK = new TimerTask(this,0).runTaskTimer(this, 0L, 20L);
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				for(Player p : Bukkit.getOnlinePlayers()) {
+					updateScoreboard(p);
+				}
+			}
+		}.runTaskTimer(this, 0L, 20L);
 		
 		getServer().getPluginManager().registerEvents(this, this);
 		
@@ -67,13 +68,30 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	}
 	
 	@EventHandler
-	public void onPlayerLoginEvent(PlayerLoginEvent event){
-		if(event.getResult() == PlayerLoginEvent.Result.ALLOWED) {
-			event.allow();
-			setScoreboard(event.getPlayer());
+	public void onPlayerLoginEvent(PlayerJoinEvent event){
+		TimerScoreboard test = TimerScoreboard.createScore(event.getPlayer());
+	}
+	
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		if(TimerScoreboard.hasScore(event.getPlayer())) {
+			TimerScoreboard.removeScore(event.getPlayer());
 		}
 	}
 	
+	public void updateScoreboard(Player p) {
+		if(TimerScoreboard.hasScore(p)) {
+			TimerScoreboard score = TimerScoreboard.getByPlayer(p);
+			score.setSlot(1, ChatColor.AQUA + TimerTask.getTime());
+		} else {
+			TimerScoreboard test = TimerScoreboard.createScore(p);
+		}
+	}
+	
+	public static void setTIMER_TASK(BukkitTask timerTask) {
+		TIMER_TASK = timerTask;
+	}
+
 	/**
 	 * Changing the drop of Gold Ores and Iron Ores to their ingots.
 	 * @param e the {@link org.bukkit.event.block.BlockBreakEvent Event} provided by a player.
@@ -91,19 +109,6 @@ public class SCPlugin extends JavaPlugin implements Listener{
             block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.IRON_INGOT));
         }
     }
-	
-	public void setScoreboard(Player p) {
-		ScoreboardManager sbm = Bukkit.getScoreboardManager();
-		Scoreboard sb = sbm.getNewScoreboard();
-		Objective o = sb.registerNewObjective("test","dummy", ChatColor.BOLD.toString() + "Test");
-		o.setDisplaySlot(DisplaySlot.SIDEBAR);
-		Score sc1 = o.getScore(ChatColor.GREEN + "Ceci est");
-		Score sc2 = o.getScore(ChatColor.RED + "un test.");
-		sc1.setScore(2);
-		sc2.setScore(1);
-		
-		p.setScoreboard(sb);
-	}
 
 	/**
 	 * Returns the {@link java.util.Set Set} of the runners' {@link java.util.UUID UUID}.

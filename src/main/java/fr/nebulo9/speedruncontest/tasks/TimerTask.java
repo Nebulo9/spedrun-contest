@@ -11,7 +11,7 @@ public class TimerTask extends BukkitRunnable {
 	private static Integer MINUTES = 0;
 	private static Integer HOURS = 0;
 	
-	private static String TIME;
+	private static String TIME = "00h 00m 00s";
 	private String SECONDS_STRING;
 	private String MINUTES_STRING;
 	private String HOURS_STRING;
@@ -22,13 +22,20 @@ public class TimerTask extends BukkitRunnable {
 		this.plugin = plugin;
 	}
 	
+	public TimerTask(SCPlugin plugin, int status) {
+		this.plugin = plugin;
+		STATUS = status;
+	}
+	
 	@Override
 	public void run() {
 		if(STATUS <= -1) {
+			SCPlugin.setGAME_STARTED(false);
 			this.cancel();
 		} else if(STATUS == 0) {
 			
 		} else {
+			SCPlugin.setGAME_STARTED(true);
 			SECONDS++;
 			if(SECONDS == 60){
 				MINUTES++;

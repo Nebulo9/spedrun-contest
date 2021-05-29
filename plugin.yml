@@ -14,14 +14,10 @@ commands:
       permission: src.runner
       description: Displays the current list of the runners
       usage: "Usage: /runners"
-   gamestart:
+   game:
       permission: src.game
-      description: Starts a game.
-      usage: "Usage: /gamestart"
-   gamestop:
-      permission: src.game
-      description: Stops a game.
-      usage: "Usage: /gamestop"
+      description: Start, pause or stop a game.
+      usage: "Usage: /game [start|stop|pause]"
    timer:
       permission: src.admin
       description: Pause, resume, stop and get the timer.
