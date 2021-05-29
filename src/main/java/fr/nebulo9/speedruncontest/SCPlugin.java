@@ -6,22 +6,30 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.Location;
 
 import fr.nebulo9.speedruncontest.commands.GameCMD;
 import fr.nebulo9.speedruncontest.commands.RunnerCMD;
 import fr.nebulo9.speedruncontest.commands.RunnersCMD;
+import fr.nebulo9.speedruncontest.commands.TestCMD;
 import fr.nebulo9.speedruncontest.commands.TimerCMD;
 import fr.nebulo9.speedruncontest.constants.Messages;
 import fr.nebulo9.speedruncontest.scoreboards.TimerScoreboard;
@@ -37,9 +45,13 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	private static Set<UUID> SPECTATORS;
 	private static boolean GAME_STARTED = false;
 	private static BukkitTask TIMER_TASK;
+	private static BukkitTask SCOREBOARD_TASK;
+	private static final Location SPAWN = new Location(Bukkit.getWorld("world"),0,Bukkit.getWorld("world").getHighestBlockYAt(0, 0),0);
+	private Player winner;
 	
 	@Override
 	public void onEnable(){
+		
 		getCommand("runner").setExecutor(new RunnerCMD(this));
 		getCommand("runners").setExecutor(new RunnersCMD(this));
 		getCommand("game").setExecutor(new GameCMD(this));
@@ -48,7 +60,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		
 		
 		TIMER_TASK = new TimerTask(this,0).runTaskTimer(this, 0L, 20L);
-		new BukkitRunnable() {
+		SCOREBOARD_TASK = new BukkitRunnable() {
 			@Override
 			public void run() {
 				for(Player p : Bukkit.getOnlinePlayers()) {
@@ -65,6 +77,21 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	@Override
 	public void onDisable() {
 		Bukkit.getServer().getConsoleSender().sendMessage(Messages.PLUGIN_DISABLED.getMessage());
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerPortalEvent(PlayerChangedWorldEvent event) {
+		if(GAME_STARTED) {
+			if(event.getFrom().getEnvironment().equals(World.Environment.THE_END)) {
+				winner = event.getPlayer();
+				TimerTask.setStatus(-1);
+				for(Player p : Bukkit.getOnlinePlayers()) {
+					p.setGameMode(GameMode.SPECTATOR);
+					p.teleport(SPAWN);
+					p.sendTitle(ChatColor.BLUE + winner.getName() + ChatColor.GOLD + " won the race !", ChatColor.GREEN + "Race time: " + ChatColor.AQUA + TimerTask.getTime(), 10, 4*20, 20);
+				}
+			}
+		}
 	}
 	
 	@EventHandler

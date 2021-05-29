@@ -22,6 +22,8 @@ commands:
       permission: src.admin
       description: Pause, resume, stop and get the timer.
       usage: "Usage: /timer [get|pause|resume|stop]"
+   test:
+      permision: src.admin
 
 permissions:
    src.runner:
