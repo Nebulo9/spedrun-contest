@@ -44,6 +44,13 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	
 	@Override
 	public void onEnable(){
+		saveConfig();
+		String worldName = getConfig().getString("world-name");
+		if(worldName == null) {
+			getConfig().set("world-name", "world");
+		}
+		saveConfig();
+		
 		getCommand("runner").setExecutor(new RunnerCMD(this));
 		getCommand("runners").setExecutor(new RunnersCMD(this));
 		getCommand("game").setExecutor(new GameCMD(this));
@@ -66,7 +73,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		getServer().getPluginManager().registerEvents(this, this);
 		
 		Bukkit.getServer().getConsoleSender().sendMessage(Messages.PLUGIN_ENABLED.getMessage());
-		SPAWN = new Location(Bukkit.getWorld("world"),0,Bukkit.getWorld("world").getHighestBlockYAt(0, 0),0);
+		SPAWN = new Location(Bukkit.getWorld(worldName),0,Bukkit.getWorld(worldName).getHighestBlockYAt(0, 0),0);
 	}
 	
 	@Override
