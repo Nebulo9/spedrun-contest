@@ -48,6 +48,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		String worldName = getConfig().getString("world-name");
 		if(worldName == null) {
 			getConfig().set("world-name", "world");
+			worldName = "world";
 		}
 		saveConfig();
 		
