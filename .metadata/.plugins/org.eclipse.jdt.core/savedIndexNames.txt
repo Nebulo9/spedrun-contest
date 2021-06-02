@@ -1,0 +1,1 @@
+INDEX VERSION 1.131+C:\Users\manga\Drive\OneDrive\Dev\Minecraft\Plugins\speedrun-contest\.metadata\.plugins\org.eclipse.jdt.core

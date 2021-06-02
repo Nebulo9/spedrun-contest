@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -42,14 +43,14 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	private static Location SPAWN;
 	private Player winner;
 	
+	private String worldName;
+	private boolean meltedOresDrop;
+	
 	@Override
 	public void onEnable(){
-		saveConfig();
-		if(getConfig().getString("world-name") == null) {
-			getConfig().set("world-name", "world");
-		}
-		String worldName = getConfig().getString("world-name");
-		saveConfig();
+		loadConfig();
+		worldName = getConfig().getString("world-name");
+		meltedOresDrop = getConfig().getBoolean("melted-ores-drop");
 		
 		getCommand("runner").setExecutor(new RunnerCMD(this));
 		getCommand("runners").setExecutor(new RunnersCMD(this));
@@ -79,6 +80,15 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	@Override
 	public void onDisable() {
 		Bukkit.getServer().getConsoleSender().sendMessage(Messages.PLUGIN_DISABLED.getMessage());
+	}
+	
+	private void loadConfig() {
+		this.saveConfig();
+		this.getConfig().addDefault("world-name", "world");
+		this.getConfig().addDefault("melted-ores-drop", true);
+		this.getConfig().options().copyDefaults(true);
+		this.saveConfig();
+		
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -114,16 +124,18 @@ public class SCPlugin extends JavaPlugin implements Listener{
 
 	@EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        if(e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-        	Block block = e.getBlock();
-            if(block.getType() == Material.GOLD_ORE){
-                e.setDropItems(false);
-                e.setExpToDrop(1);
-                block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.GOLD_INGOT));
-            } else if(block.getType() == Material.IRON_ORE) {
-            	e.setDropItems(false);
-                e.setExpToDrop(1);
-                block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.IRON_INGOT));
+        if(meltedOresDrop) {
+        	if(e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+            	Block block = e.getBlock();
+                if(block.getType() == Material.GOLD_ORE){
+                    e.setDropItems(false);
+                    e.setExpToDrop(1);
+                    block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.GOLD_INGOT));
+                } else if(block.getType() == Material.IRON_ORE) {
+                	e.setDropItems(false);
+                    e.setExpToDrop(1);
+                    block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.IRON_INGOT));
+                }
             }
         }
     }
