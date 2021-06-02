@@ -31,6 +31,7 @@ public class GameCMD implements CommandExecutor {
 						if(!(SCPlugin.getRunners().isEmpty())) {
 							sender.sendMessage(ChatColor.AQUA + Messages.GAME_STARTING.getMessage() + ChatColor.RESET);
 							TimerTask.setStatus(1);
+							Bukkit.getWorld(PLUGIN.getWorldName()).setTime(0);
 							for(Player p : Bukkit.getOnlinePlayers()) {
 								if(SCPlugin.getRunners().contains(p.getUniqueId())) {
 									p.setGameMode(GameMode.SURVIVAL);

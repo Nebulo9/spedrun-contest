@@ -12,11 +12,16 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -40,6 +45,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	private static boolean GAME_STARTED = false;
 	private static BukkitTask TIMER_TASK;
 	private static BukkitTask SCOREBOARD_TASK;
+	private static BukkitTask KILL_BRUTES;
 	private static Location SPAWN;
 	private Player winner;
 	
@@ -63,7 +69,8 @@ public class SCPlugin extends JavaPlugin implements Listener{
 			public void run() {
 				for(Player p : Bukkit.getOnlinePlayers()) {
 					updateScoreboard(p);
-					if(!GAME_STARTED) {
+					if(!GAME_STARTED && !p.isOp()) {
+						p.setGameMode(GameMode.ADVENTURE);
 						p.setInvulnerable(true);
 						p.setCollidable(false);
 					}
@@ -71,12 +78,28 @@ public class SCPlugin extends JavaPlugin implements Listener{
 			}
 		}.runTaskTimer(this, 0L, 20L);
 		
+		KILL_BRUTES = new BukkitRunnable() {
+			@Override
+			public void run() {
+				for(Player p : Bukkit.getOnlinePlayers()) {
+					if(p.getWorld().getEnvironment() == World.Environment.NETHER) {
+						for(LivingEntity e : p.getWorld().getLivingEntities()) {
+							if(e.getType() == EntityType.PIGLIN_BRUTE) {
+								e.damage(1500);
+							}
+						}
+					}
+				}
+			}
+		}.runTaskTimer(this, 0, 1);
+		
 		getServer().getPluginManager().registerEvents(this, this);
 		
 		Bukkit.getServer().getConsoleSender().sendMessage(Messages.PLUGIN_ENABLED.getMessage());
 		SPAWN = new Location(Bukkit.getWorld(worldName),0,Bukkit.getWorld(worldName).getHighestBlockYAt(0, 0),0);
 	}
-	
+
+
 	@Override
 	public void onDisable() {
 		Bukkit.getServer().getConsoleSender().sendMessage(Messages.PLUGIN_DISABLED.getMessage());
@@ -89,6 +112,13 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
 		
+	}
+	
+	@EventHandler
+	public void onEntitySpawnEvent(CreatureSpawnEvent e) {
+		if(e.getEntityType() == EntityType.PIGLIN_BRUTE) {
+			e.setCancelled(true);
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -186,8 +216,17 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		GAME_STARTED = gameStatus;
 	}
 
+	public String getWorldName() {
+		return worldName;
+	}
+
+
 	public static BukkitTask getTimerTask() {
 		return TIMER_TASK;
+	}
+	
+	public static Location getSPAWN() {
+		return SPAWN;
 	}
 	
 }
