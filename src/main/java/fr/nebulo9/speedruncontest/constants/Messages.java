@@ -31,6 +31,8 @@ public enum Messages {
 	TIMER_STARTED("The timer has been started."),
 	TIMER_STARTED_OR_PAUSED("The timer is already started or paused."),
 	
+	WRONG_WORLD("You are not in the right world"),
+	
 	;
 	
 	private String message;

@@ -18,7 +18,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -94,12 +93,16 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		
 		Bukkit.getServer().getConsoleSender().sendMessage(Messages.PLUGIN_ENABLED.getMessage());
 		SPAWN = new Location(Bukkit.getWorld(worldName),0,Bukkit.getWorld(worldName).getHighestBlockYAt(0, 0),0);
+		Bukkit.getWorld(worldName).setSpawnLocation(SPAWN);
 	}
 
 
 	@Override
 	public void onDisable() {
 		Bukkit.getServer().getConsoleSender().sendMessage(Messages.PLUGIN_DISABLED.getMessage());
+		TIMER_TASK.cancel();
+		SCOREBOARD_TASK.cancel();
+		KILL_BRUTES.cancel();
 	}
 	
 	private void loadConfig() {
@@ -109,13 +112,6 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
 		
-	}
-	
-	@EventHandler
-	public void onEntitySpawnEvent(CreatureSpawnEvent e) {
-		if(e.getEntityType() == EntityType.PIGLIN_BRUTE) {
-			e.setCancelled(true);
-		}
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -130,7 +126,9 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	
 	@EventHandler
 	public void onPlayerLoginEvent(PlayerJoinEvent event){
-		TimerScoreboard test = TimerScoreboard.createScore(event.getPlayer());
+		if(event.getPlayer().getWorld().equals(Bukkit.getWorld(worldName))) {
+			TimerScoreboard test = TimerScoreboard.createScore(event.getPlayer());
+		}
 	}
 	
 	@EventHandler
@@ -141,27 +139,32 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	}
 	
 	public void updateScoreboard(Player p) {
-		if(TimerScoreboard.hasScore(p)) {
-			TimerScoreboard score = TimerScoreboard.getByPlayer(p);
-			score.setSlot(1, ChatColor.AQUA + TimerTask.getTime());
-		} else {
-			TimerScoreboard test = TimerScoreboard.createScore(p);
+		if(p.getWorld().equals(Bukkit.getWorld(worldName))) {
+			if(TimerScoreboard.hasScore(p)) {
+				TimerScoreboard score = TimerScoreboard.getByPlayer(p);
+				score.setSlot(1, ChatColor.AQUA + TimerTask.getTime());
+			} else {
+				TimerScoreboard test = TimerScoreboard.createScore(p);
+			}
 		}
+		
 	}
 
 	@EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        if(meltedOresDrop) {
-        	if(e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-            	Block block = e.getBlock();
-                if(block.getType() == Material.GOLD_ORE){
-                    e.setDropItems(false);
-                    e.setExpToDrop(1);
-                    block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.GOLD_INGOT));
-                } else if(block.getType() == Material.IRON_ORE) {
-                	e.setDropItems(false);
-                    e.setExpToDrop(1);
-                    block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.IRON_INGOT));
+        if(e.getPlayer().getWorld().equals(Bukkit.getWorld(worldName))) {
+        	if(meltedOresDrop) {
+            	if(e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                	Block block = e.getBlock();
+                    if(block.getType() == Material.GOLD_ORE){
+                        e.setDropItems(false);
+                        e.setExpToDrop(1);
+                        block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.GOLD_INGOT));
+                    } else if(block.getType() == Material.IRON_ORE) {
+                    	e.setDropItems(false);
+                        e.setExpToDrop(1);
+                        block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.IRON_INGOT));
+                    }
                 }
             }
         }
