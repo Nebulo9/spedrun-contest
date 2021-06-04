@@ -37,7 +37,7 @@ import fr.nebulo9.speedruncontest.tasks.TimerTask;
 public class SCPlugin extends JavaPlugin implements Listener{
 
 	private static Set<UUID> RUNNERS = new HashSet<UUID>();
-	private static Set<UUID> SPECTATORS;
+	private static Set<UUID> SPECTATORS = new HashSet<UUID>();
 	private static boolean GAME_STARTED = false;
 	private static BukkitTask TIMER_TASK;
 	private static BukkitTask SCOREBOARD_TASK;
@@ -46,12 +46,16 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	private Player winner;
 	
 	private String worldName;
+	private String worldNameNether;
+	private String worldNameEnd;
 	private boolean meltedOresDrop;
 	
 	@Override
 	public void onEnable(){
 		loadConfig();
 		worldName = getConfig().getString("world-name");
+		worldNameNether = worldName + "_nether";
+		worldNameEnd = worldName + "_the_end";
 		meltedOresDrop = getConfig().getBoolean("melted-ores-drop");
 		
 		getCommand("runner").setExecutor(new RunnerCMD(this));
@@ -65,11 +69,6 @@ public class SCPlugin extends JavaPlugin implements Listener{
 			public void run() {
 				for(Player p : Bukkit.getOnlinePlayers()) {
 					updateScoreboard(p);
-					if(!GAME_STARTED && !p.isOp()) {
-						p.setGameMode(GameMode.ADVENTURE);
-						p.setInvulnerable(true);
-						p.setCollidable(false);
-					}
 				}
 			}
 		}.runTaskTimer(this, 0L, 20L);
@@ -78,9 +77,16 @@ public class SCPlugin extends JavaPlugin implements Listener{
 			@Override
 			public void run() {
 				for(Player p : Bukkit.getOnlinePlayers()) {
-					if(p.getWorld().getEnvironment() == World.Environment.NETHER) {
+					if(p.getWorld().equals(Bukkit.getWorld(worldNameNether))) {
 						for(LivingEntity e : p.getWorld().getLivingEntities()) {
 							if(e.getType() == EntityType.PIGLIN_BRUTE) {
+								e.damage(1500);
+							}
+						}
+					}
+					if(p.getWorld().equals(Bukkit.getWorld(worldName))) {
+						for(LivingEntity e : p.getWorld().getLivingEntities()) {
+							if(e.getType() == EntityType.PHANTOM) {
 								e.damage(1500);
 							}
 						}
@@ -92,7 +98,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		getServer().getPluginManager().registerEvents(this, this);
 		
 		Bukkit.getServer().getConsoleSender().sendMessage(Messages.PLUGIN_ENABLED.getMessage());
-		SPAWN = new Location(Bukkit.getWorld(worldName),0,Bukkit.getWorld(worldName).getHighestBlockYAt(0, 0),0);
+		SPAWN = new Location(Bukkit.getWorld(worldName),0,Bukkit.getWorld(worldName).getHighestBlockYAt(0, 0)+1,0);
 		Bukkit.getWorld(worldName).setSpawnLocation(SPAWN);
 	}
 
@@ -129,6 +135,9 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		if(event.getPlayer().getWorld().equals(Bukkit.getWorld(worldName))) {
 			TimerScoreboard test = TimerScoreboard.createScore(event.getPlayer());
 		}
+		if(!RUNNERS.contains(event.getPlayer().getUniqueId())) {
+			addSpectator(event.getPlayer().getUniqueId());
+		}
 	}
 	
 	@EventHandler
@@ -139,7 +148,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	}
 	
 	public void updateScoreboard(Player p) {
-		if(p.getWorld().equals(Bukkit.getWorld(worldName))) {
+		if(p.getWorld().equals(Bukkit.getWorld(worldName)) || p.getWorld().equals(Bukkit.getWorld(worldNameNether)) || p.getWorld().equals(Bukkit.getWorld(worldNameEnd))) {
 			if(TimerScoreboard.hasScore(p)) {
 				TimerScoreboard score = TimerScoreboard.getByPlayer(p);
 				score.setSlot(1, ChatColor.AQUA + TimerTask.getTime());
@@ -152,7 +161,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 
 	@EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        if(e.getPlayer().getWorld().equals(Bukkit.getWorld(worldName))) {
+        if(e.getPlayer().getWorld().equals(Bukkit.getWorld(worldName)) || e.getPlayer().getWorld().equals(Bukkit.getWorld(worldNameNether)) || e.getPlayer().getWorld().equals(Bukkit.getWorld(worldNameEnd))) {
         	if(meltedOresDrop) {
             	if(e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 	Block block = e.getBlock();
@@ -187,6 +196,9 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		String name = Bukkit.getPlayer(uuid).getName();
 		Bukkit.getPlayer(uuid).setDisplayName(ChatColor.GREEN + name + ChatColor.RESET);
 		Bukkit.getPlayer(uuid).setPlayerListName(Bukkit.getOfflinePlayer(uuid).getPlayer().getDisplayName());
+		Bukkit.getPlayer(uuid).setInvulnerable(true);
+		Bukkit.getPlayer(uuid).setCollidable(false);
+		Bukkit.getPlayer(uuid).setSaturation(10000f);
 		RUNNERS.add(uuid);
 	}
 	
@@ -196,18 +208,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		Bukkit.getPlayer(uuid).setPlayerListName(Bukkit.getOfflinePlayer(uuid).getPlayer().getDisplayName());
 		RUNNERS.remove(uuid);
 	}
-
-	public static Set<UUID> getSpectators() {
-		return SPECTATORS;
-	}
 	
-	public static void addSpectator(UUID uuid) {
-		SPECTATORS.add(uuid);
-	}
-	
-	public static void removeSpectator(UUID uuid) {
-		SPECTATORS.remove(uuid);
-	}
 	public static boolean isGAME_STARTED() {
 		return GAME_STARTED;
 	}
@@ -227,6 +228,26 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	
 	public static Location getSPAWN() {
 		return SPAWN;
+	}
+
+	public static void addSpectator(UUID uuid) {
+		SPECTATORS.add(uuid);
+		Bukkit.getPlayer(uuid).setGameMode(GameMode.SPECTATOR);
+	}
+	
+	public static void removeSpectator(UUID uuid) {
+		SPECTATORS.remove(uuid);
+		Bukkit.getPlayer(uuid).setGameMode(GameMode.ADVENTURE);
+	}
+
+
+	public String getWorldNameNether() {
+		return worldNameNether;
+	}
+
+
+	public String getWorldNameEnd() {
+		return worldNameEnd;
 	}
 	
 }

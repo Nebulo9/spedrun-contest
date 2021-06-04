@@ -25,14 +25,20 @@ public class RunnerCMD implements CommandExecutor {
 				if(args.length == 0) {
 					Player p = (Player)sender;
 					if(p.getWorld().equals(Bukkit.getWorld(PLUGIN.getWorldName()))) {
-						if(SCPlugin.getRunners().contains(p.getUniqueId())) {
-							SCPlugin.removeRunner(p.getUniqueId());
-							p.teleport(SCPlugin.getSPAWN());
-							p.sendMessage(ChatColor.GOLD + Messages.PLAYER_NO_MORE_RUNNER.getMessage());
+						if(!SCPlugin.isGAME_STARTED()) {
+							if(SCPlugin.getRunners().contains(p.getUniqueId())) {
+								SCPlugin.removeRunner(p.getUniqueId());
+								SCPlugin.addSpectator(p.getUniqueId());
+								p.teleport(SCPlugin.getSPAWN());
+								p.sendMessage(ChatColor.GOLD + Messages.PLAYER_NO_MORE_RUNNER.getMessage());
+							} else {
+								SCPlugin.addRunner(p.getUniqueId());
+								SCPlugin.removeSpectator(p.getUniqueId());
+								p.sendMessage(ChatColor.GOLD + Messages.PLAYER_IS_NOW_RUNNER.getMessage());
+								p.teleport(SCPlugin.getSPAWN());
+							}
 						} else {
-							SCPlugin.addRunner(p.getUniqueId());
-							p.sendMessage(ChatColor.GOLD + Messages.PLAYER_IS_NOW_RUNNER.getMessage());
-							p.teleport(SCPlugin.getSPAWN());
+							p.sendMessage(ChatColor.RED + Messages.GAME_ALREADY_STARTED.getMessage());
 						}
 					} else {
 						p.sendMessage(ChatColor.RED + Messages.WRONG_WORLD.getMessage());
