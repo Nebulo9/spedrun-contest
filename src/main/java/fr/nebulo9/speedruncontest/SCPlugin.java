@@ -132,7 +132,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	
 	@EventHandler
 	public void onPlayerLoginEvent(PlayerJoinEvent event){
-		if(event.getPlayer().getWorld().equals(Bukkit.getWorld(worldName))) {
+		if(event.getPlayer().getWorld().equals(Bukkit.getWorld(worldName)) || event.getPlayer().getWorld().equals(Bukkit.getWorld(worldNameNether)) || event.getPlayer().getWorld().equals(Bukkit.getWorld(worldNameEnd))) {
 			TimerScoreboard test = TimerScoreboard.createScore(event.getPlayer());
 		}
 		if(!RUNNERS.contains(event.getPlayer().getUniqueId())) {
@@ -182,9 +182,11 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	public void victory() {
 		TimerTask.setStatus(-1);
 		for(Player p : Bukkit.getOnlinePlayers()) {
-			p.setGameMode(GameMode.SPECTATOR);
-			p.teleport(SPAWN);
-			p.sendTitle(ChatColor.BLUE + winner.getName() + ChatColor.GOLD + " won the race !", ChatColor.GREEN + "Race time: " + ChatColor.AQUA + TimerTask.getTime(), 10, 4*20, 20);
+			if(p.getWorld().equals(Bukkit.getWorld(worldName)) || p.getWorld().equals(Bukkit.getWorld(worldNameNether)) || p.getWorld().equals(Bukkit.getWorld(worldNameEnd))) {
+				p.setGameMode(GameMode.SPECTATOR);
+				p.teleport(SPAWN);
+				p.sendTitle(ChatColor.BLUE + winner.getName() + ChatColor.GOLD + " won the race !", ChatColor.GREEN + "Race time: " + ChatColor.AQUA + TimerTask.getTime(), 10, 4*20, 20);
+			}
 		}
 	}
 	

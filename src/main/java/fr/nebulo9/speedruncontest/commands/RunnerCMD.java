@@ -24,7 +24,7 @@ public class RunnerCMD implements CommandExecutor {
 			if(sender instanceof Player) {
 				if(args.length == 0) {
 					Player p = (Player)sender;
-					if(p.getWorld().equals(Bukkit.getWorld(PLUGIN.getWorldName()))) {
+					if(p.getWorld().equals(Bukkit.getWorld(PLUGIN.getWorldName())) || p.getWorld().equals(Bukkit.getWorld(PLUGIN.getWorldNameNether())) || p.getWorld().equals(Bukkit.getWorld(PLUGIN.getWorldNameEnd()))) {
 						if(!SCPlugin.isGAME_STARTED()) {
 							if(SCPlugin.getRunners().contains(p.getUniqueId())) {
 								SCPlugin.removeRunner(p.getUniqueId());
