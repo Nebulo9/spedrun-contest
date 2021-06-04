@@ -123,7 +123,7 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onWorldChangeEvent(PlayerChangedWorldEvent event) {
 		if(GAME_STARTED) {
-			if(event.getFrom().getEnvironment().equals(World.Environment.THE_END)) {
+			if(event.getFrom().equals(Bukkit.getWorld(worldNameEnd))) {
 				winner = event.getPlayer();
 				victory();
 			}
