@@ -123,9 +123,11 @@ public class SCPlugin extends JavaPlugin implements Listener{
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onWorldChangeEvent(PlayerChangedWorldEvent event) {
 		if(GAME_STARTED) {
-			if(event.getFrom().equals(Bukkit.getWorld(worldNameEnd))) {
-				winner = event.getPlayer();
-				victory();
+			if(RUNNERS.contains(event.getPlayer().getUniqueId())) {
+				if(event.getFrom().equals(Bukkit.getWorld(worldNameEnd))) {
+					winner = event.getPlayer();
+					victory();
+				}
 			}
 		}
 	}
@@ -183,7 +185,10 @@ public class SCPlugin extends JavaPlugin implements Listener{
 		TimerTask.setStatus(-1);
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			if(p.getWorld().equals(Bukkit.getWorld(worldName)) || p.getWorld().equals(Bukkit.getWorld(worldNameNether)) || p.getWorld().equals(Bukkit.getWorld(worldNameEnd))) {
-				p.setGameMode(GameMode.SPECTATOR);
+				if(RUNNERS.contains(p.getUniqueId())) {
+					removeRunner(p.getUniqueId());
+				}
+				addSpectator(p.getUniqueId());
 				p.teleport(SPAWN);
 				p.sendTitle(ChatColor.BLUE + winner.getName() + ChatColor.GOLD + " won the race !", ChatColor.GREEN + "Race time: " + ChatColor.AQUA + TimerTask.getTime(), 10, 4*20, 20);
 			}
