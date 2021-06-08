@@ -3,14 +3,22 @@
   <groupId>fr.nebulo9.speedruncontest</groupId>
   <artifactId>speedrun-contest</artifactId>
   <version>1.1.0</version>
-  
-  <properties>	
-  	<maven.compiler.target>1.14</maven.compiler.target>
-	<maven.compiler.source>1.14</maven.compiler.source>
-	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<maven.compiler.release>14</maven.compiler.release>
-  </properties>
-  
+
+    <build>
+        <finalName>SpeedrunContest</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>14</source>
+                    <target>14</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
   <repositories>
   	<repository>
         <id>spigot-repo</id>

@@ -44,10 +44,10 @@ public class SCPlugin extends JavaPlugin{
 				getLogger().severe("Could not lobby. Ending process...");
 				getServer().shutdown();
 			}
+
+			GAME_MANAGER = new GameManager(this);
+			GAME_MANAGER.setup();
 		});
-		
-		GAME_MANAGER = new GameManager(this);
-		GAME_MANAGER.setup();
 		
 		this.getLogger().info(Messages.PLUGIN_ENABLED.getMessage());
 	}

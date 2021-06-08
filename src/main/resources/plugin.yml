@@ -1,7 +1,7 @@
 name: SpeedrunContest
 main: fr.nebulo9.speedruncontest.SCPlugin
 author: Nebulo9
-version: ${project.version}
+version: 1.1.0
 description: This plugin provides a mean to play a Speedrun contest with your friends.
 api-version: 1.16 #1.16.*
 
