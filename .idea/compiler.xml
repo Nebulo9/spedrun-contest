@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="speedrun-contest" target="1.14" />
+      <module name="speedrun-contest" target="14" />
     </bytecodeTargetLevel>
   </component>
 </project>
