@@ -12,25 +12,11 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
+import fr.nebulo9.speedruncontest.tasks.TimerTask;
+
 public class TimerScoreboard {
 	
 	private static HashMap<UUID,TimerScoreboard> PLAYERS = new HashMap<>();
-	
-	public static boolean hasScore(Player p) {
-		return PLAYERS.containsKey(p.getUniqueId());
-	}
-	
-	public static TimerScoreboard createScore(Player p) {
-		return new TimerScoreboard(p);
-	}
-	
-	public static TimerScoreboard getByPlayer(Player p) {
-		return PLAYERS.get(p.getUniqueId());
-	}
-	
-	public static TimerScoreboard removeScore(Player p) {
-		return PLAYERS.remove(p.getUniqueId());
-	}
 	
 	private ScoreboardManager manager;
 	private Scoreboard scoreboard;
@@ -47,6 +33,7 @@ public class TimerScoreboard {
 			team.addEntry(ChatColor.values()[i].toString());
 		}
 		setSlot(2,ChatColor.GOLD + "Timer :");
+		setSlot(1, ChatColor.AQUA + TimerTask.getTime());
 		p.setScoreboard(scoreboard);
 		PLAYERS.put(p.getUniqueId(), this);
 	}
@@ -74,4 +61,29 @@ public class TimerScoreboard {
         }
         return s.length()>16 ? s.substring(16) : "";
     }
+    
+    public static void updateScoreboard(Player p) {
+    	if(hasScore(p)) {
+			TimerScoreboard score = getByPlayer(p);
+			score.setSlot(1, ChatColor.AQUA + TimerTask.getTime());
+		} else {
+			createScore(p);
+		}
+    }
+
+	public static boolean hasScore(Player p) {
+		return PLAYERS.containsKey(p.getUniqueId());
+	}
+	
+	public static TimerScoreboard createScore(Player p) {
+		return new TimerScoreboard(p);
+	}
+	
+	public static TimerScoreboard getByPlayer(Player p) {
+		return PLAYERS.get(p.getUniqueId());
+	}
+	
+	public static TimerScoreboard removeScore(Player p) {
+		return PLAYERS.remove(p.getUniqueId());
+	}
 }

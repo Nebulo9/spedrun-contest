@@ -2,10 +2,11 @@ package fr.nebulo9.speedruncontest.tasks;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.nebulo9.speedruncontest.SCPlugin;
+import fr.nebulo9.speedruncontest.managers.GameManager;
 
 public class TimerTask extends BukkitRunnable {
-	private final SCPlugin plugin;
+	
+	private static GameManager GAME_MANAGER;
 	
 	private static Integer SECONDS = 0;
 	private static Integer MINUTES = 0;
@@ -16,26 +17,27 @@ public class TimerTask extends BukkitRunnable {
 	private String MINUTES_STRING;
 	private String HOURS_STRING;
 	
-	private static int STATUS = 1;
+	private static Status STATUS;
 	
-	public TimerTask(SCPlugin plugin) {
-		this.plugin = plugin;
+	public TimerTask(GameManager gameManager) {
+		GAME_MANAGER = gameManager;
 	}
 	
-	public TimerTask(SCPlugin plugin, int status) {
-		this.plugin = plugin;
-		STATUS = status;
+	public enum Status {
+		STARTED,
+		PAUSED,
+		STOPPED,
 	}
 	
 	@Override
 	public void run() {
-		if(STATUS <= -1) {
-			SCPlugin.setGAME_STARTED(false);
+		if(STATUS == Status.STOPPED) {
+			GAME_MANAGER.setStatus(GameManager.Status.FINISHED);
 			this.cancel();
-		} else if(STATUS == 0) {
+		} else if(STATUS == Status.PAUSED) {
 			
-		} else {
-			SCPlugin.setGAME_STARTED(true);
+		} else if(STATUS == Status.STARTED){
+			GAME_MANAGER.setStatus(GameManager.Status.STARTED);
 			SECONDS++;
 			if(SECONDS == 60){
 				MINUTES++;
@@ -61,11 +63,11 @@ public class TimerTask extends BukkitRunnable {
 		}
 	}
 
-	public static int getStatus() {
+	public static Status getStatus() {
 		return STATUS;
 	}
 
-	public static void setStatus(int status) {
+	public static void setStatus(Status status) {
 		STATUS = status;
 	}
 

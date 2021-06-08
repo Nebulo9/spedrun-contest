@@ -2,11 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fr.nebulo9.speedruncontest</groupId>
   <artifactId>speedrun-contest</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.1.0</version>
   
   <properties>	
   	<maven.compiler.target>1.14</maven.compiler.target>
 	<maven.compiler.source>1.14</maven.compiler.source>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<maven.compiler.release>14</maven.compiler.release>
   </properties>
   
   <repositories>
@@ -21,6 +23,14 @@
        <groupId>org.spigotmc</groupId>
        <artifactId>spigot-api</artifactId>
        <version>1.16.5-R0.1-SNAPSHOT</version>
+       <scope>provided</scope>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-compress</artifactId>
+	    <version>1.20</version>
+	    <scope>compile</scope>
 	</dependency>
   </dependencies>
   

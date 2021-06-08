@@ -1,4 +1,4 @@
-package fr.nebulo9.speedruncontest.constants;
+package fr.nebulo9.speedruncontest.util;
 
 import org.bukkit.ChatColor;
 
@@ -14,7 +14,7 @@ public enum Messages {
 	PLAYER_IS_NOW_RUNNER("You are now a runner."),
 	PLAYER_NO_MORE_RUNNER("You are no more a runner."),
 	
-	RUNNERS_LIST_TITLE(ChatColor.GOLD + "-----[" + ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "SPEEDRUNNERS" + ChatColor.GOLD + "]-----" + ChatColor.RESET + "\n"),
+	TITLE(ChatColor.GOLD + "-----[" + ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "SPEEDRUN CONTEST" + ChatColor.GOLD + "]-----" + ChatColor.RESET + "\n"),
 	
 	RUNNERS_LIST_EMPTY("There are no runners."),
 	GAME_STARTING("The game is starting."),
@@ -24,7 +24,7 @@ public enum Messages {
 	GAME_ALREADY_STOPPED("There is no game running."),
 	GAME_ALREADY_PAUSED("The game is already paused."),
 	
-	TIMER_PAUSED_OR_STOPPED("The timer is already paused or stop."),
+	TIMER_PAUSED_OR_STOPPED("The timer is already paused or stopped."),
 	TIMER_PAUSED("The timer has been paused."),
 	TIMER_RESUMED("The timer has been resumed."),
 	TIMER_STOPPED("The timer has been stopped."),
