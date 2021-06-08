@@ -1,12 +1,12 @@
 package fr.nebulo9.speedruncontest;
 
+import fr.nebulo9.speedruncontest.commands.StopCMD;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.nebulo9.speedruncontest.commands.RunnerCMD;
 import fr.nebulo9.speedruncontest.commands.RunnersCMD;
 import fr.nebulo9.speedruncontest.commands.StartCMD;
-import fr.nebulo9.speedruncontest.commands.TimerCMD;
 import fr.nebulo9.speedruncontest.listeners.DropListeners;
 import fr.nebulo9.speedruncontest.listeners.GameListener;
 import fr.nebulo9.speedruncontest.listeners.LoginLogoutListener;
@@ -42,7 +42,7 @@ public class SCPlugin extends JavaPlugin{
 		getCommand("runner").setExecutor(new RunnerCMD(GAME_MANAGER));
 		getCommand("runners").setExecutor(new RunnersCMD(GAME_MANAGER));
 		getCommand("start").setExecutor(new StartCMD(GAME_MANAGER));
-		getCommand("timer").setExecutor(new TimerCMD(GAME_MANAGER));
+		getCommand("stop").setExecutor(new StopCMD(GAME_MANAGER));
 		
 		this.getServer().getPluginManager().registerEvents(new DropListeners(this), this);
 		this.getServer().getPluginManager().registerEvents(new GameListener(GAME_MANAGER), this);
