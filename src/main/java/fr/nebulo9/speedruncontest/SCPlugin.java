@@ -28,6 +28,7 @@ public class SCPlugin extends JavaPlugin{
 		setConfig();
 
 		WORLD_MANAGER = new WorldManager(this);
+		GAME_MANAGER = new GameManager(this);
 		Bukkit.getScheduler().runTask(this, () -> {
 			WORLD_MANAGER.setup();
 
@@ -35,8 +36,6 @@ public class SCPlugin extends JavaPlugin{
 				getLogger().severe("Could not lobby. Ending process...");
 				getServer().shutdown();
 			}
-
-			GAME_MANAGER = new GameManager(this);
 			GAME_MANAGER.setup();
 		});
 
