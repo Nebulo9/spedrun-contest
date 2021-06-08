@@ -23,7 +23,7 @@ public class CompressedFileActions {
 		FileOutputStream outStream = new FileOutputStream(file);
 		FileChannel fileChannel = outStream.getChannel();
 		
-		fileChannel.transferFrom(fileChannel, 0, Long.MAX_VALUE);
+		fileChannel.transferFrom(channel, 0, Long.MAX_VALUE);
 	}
 	
 	public static void decompressGzip(File source,File target) throws IOException {

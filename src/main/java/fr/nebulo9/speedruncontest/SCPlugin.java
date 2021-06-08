@@ -26,20 +26,11 @@ public class SCPlugin extends JavaPlugin{
 		loadConfig();
 		config = new Config();
 		setConfig();
-		
-		getCommand("runner").setExecutor(new RunnerCMD(GAME_MANAGER));
-		getCommand("runners").setExecutor(new RunnersCMD(GAME_MANAGER));
-		getCommand("start").setExecutor(new StartCMD(GAME_MANAGER));
-		getCommand("timer").setExecutor(new TimerCMD(GAME_MANAGER));
-		
-		this.getServer().getPluginManager().registerEvents(new DropListeners(this), this);
-		this.getServer().getPluginManager().registerEvents(new GameListener(GAME_MANAGER), this);
-		this.getServer().getPluginManager().registerEvents(new LoginLogoutListener(), this);
-		
+
 		WORLD_MANAGER = new WorldManager(this);
 		Bukkit.getScheduler().runTask(this, () -> {
 			WORLD_MANAGER.setup();
-			
+
 			if(!WORLD_MANAGER.testLobbyExistence()) {
 				getLogger().severe("Could not lobby. Ending process...");
 				getServer().shutdown();
@@ -48,6 +39,15 @@ public class SCPlugin extends JavaPlugin{
 			GAME_MANAGER = new GameManager(this);
 			GAME_MANAGER.setup();
 		});
+
+		getCommand("runner").setExecutor(new RunnerCMD(GAME_MANAGER));
+		getCommand("runners").setExecutor(new RunnersCMD(GAME_MANAGER));
+		getCommand("start").setExecutor(new StartCMD(GAME_MANAGER));
+		getCommand("timer").setExecutor(new TimerCMD(GAME_MANAGER));
+		
+		this.getServer().getPluginManager().registerEvents(new DropListeners(this), this);
+		this.getServer().getPluginManager().registerEvents(new GameListener(GAME_MANAGER), this);
+		this.getServer().getPluginManager().registerEvents(new LoginLogoutListener(), this);
 		
 		this.getLogger().info(Messages.PLUGIN_ENABLED.getMessage());
 	}
