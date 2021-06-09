@@ -12,8 +12,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.*;
 
 import fr.nebulo9.speedruncontest.SCPlugin;
 import fr.nebulo9.speedruncontest.tasks.TimerTask;
@@ -73,6 +72,7 @@ public class GameManager {
 			player.setGameMode(GameMode.SURVIVAL);
 			player.setFoodLevel(20);
 			player.setHealth(20);
+			setTabHealth(player);
 		});
 
 		spawn.getWorld().setTime(0);
@@ -110,24 +110,31 @@ public class GameManager {
 	}
 
 	public void stop(Player winner) {
-		status = Status.FINISHED;
+		if(winner != null) {
+			status = Status.FINISHED;
 
-		PIGLIN_REMOVE.cancel();
-		TIMER.cancel();
-		SCOREBOARD.cancel();
+			PIGLIN_REMOVE.cancel();
+			TIMER.cancel();
+			SCOREBOARD.cancel();
+			new BukkitRunnable() {
+				@Override
+				public void run() {
 
-		PLUGIN.getServer().getOnlinePlayers().forEach(player -> {
-			player.setGameMode(GameMode.SPECTATOR);
-			player.teleport(spawn);
-			player.sendTitle(ChatColor.BLUE + winner.getName() + ChatColor.GOLD + " won the race !", ChatColor.GREEN + "Race time: " + ChatColor.AQUA + TimerTask.getTime(), 10, 4*20, 20);
-		});
+					PLUGIN.getServer().getOnlinePlayers().forEach(player -> {
+						player.setGameMode(GameMode.SPECTATOR);
+						player.teleport(spawn);
+						player.sendTitle(ChatColor.BLUE + winner.getName() + ChatColor.GOLD + " won the race !", ChatColor.GREEN + "Race time: " + ChatColor.AQUA + TimerTask.getTime(), 10, 4*20, 20);
+					});
 
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				PLUGIN.getServer().shutdown();
-			}
-		}.runTaskLater(PLUGIN,30*20);
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							PLUGIN.getServer().shutdown();
+						}
+					}.runTaskLater(PLUGIN,30*20);
+				}
+			}.runTaskLater(PLUGIN,30L);
+		}
 	}
 	
 	public Team getRunnersTeam() {
@@ -150,12 +157,17 @@ public class GameManager {
 		return status;
 	}
 
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-
 	public Set<Player> getRunners() {
 		return runners;
+	}
+
+	public void setTabHealth(Player p) {
+		Objective health = Bukkit.getScoreboardManager().getMainScoreboard().getObjective("health");
+		if(health == null) {
+			health = Bukkit.getScoreboardManager().getMainScoreboard().registerNewObjective("health", "health", ChatColor.RED + "\u2665", RenderType.HEARTS);
+		}
+		health.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+		p.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 	}
 
 	public void addSpectator(Player p){

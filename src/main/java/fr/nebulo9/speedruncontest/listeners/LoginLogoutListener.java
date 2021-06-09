@@ -1,5 +1,6 @@
 package fr.nebulo9.speedruncontest.listeners;
 
+import fr.nebulo9.speedruncontest.managers.GameManager;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,10 +12,18 @@ import fr.nebulo9.speedruncontest.util.Messages;
 import org.bukkit.ChatColor;
 
 public class LoginLogoutListener implements Listener{
+	private static GameManager GAME_MANAGER;
+
+	public LoginLogoutListener(GameManager gameManager){
+		GAME_MANAGER = gameManager;
+	}
+
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		event.getPlayer().sendMessage(Messages.TITLE.getMessage() + ChatColor.AQUA + "Type " + ChatColor.GOLD + "/runner" + ChatColor.AQUA + " to be a runner." + ChatColor.RESET);
-		event.getPlayer().setGameMode(GameMode.SPECTATOR);
+		if(GAME_MANAGER.getStatus() != GameManager.Status.STARTED){
+			event.getPlayer().sendMessage(Messages.TITLE.getMessage() + ChatColor.AQUA + "Type " + ChatColor.GOLD + "/runner" + ChatColor.AQUA + " to be a runner." + ChatColor.RESET);
+			event.getPlayer().setGameMode(GameMode.SPECTATOR);
+		}
 		TimerScoreboard.updateScoreboard(event.getPlayer());
 	}
 	

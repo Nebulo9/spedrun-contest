@@ -46,7 +46,7 @@ public class SCPlugin extends JavaPlugin{
 		
 		this.getServer().getPluginManager().registerEvents(new DropListeners(this), this);
 		this.getServer().getPluginManager().registerEvents(new GameListener(GAME_MANAGER), this);
-		this.getServer().getPluginManager().registerEvents(new LoginLogoutListener(), this);
+		this.getServer().getPluginManager().registerEvents(new LoginLogoutListener(GAME_MANAGER), this);
 		
 		this.getLogger().info(Messages.PLUGIN_ENABLED.getMessage());
 	}
