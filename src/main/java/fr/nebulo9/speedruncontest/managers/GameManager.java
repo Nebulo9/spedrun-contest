@@ -49,7 +49,7 @@ public class GameManager {
 			runnersTeam.removeEntry(entry);
 		}
 
-		spawn = Bukkit.getWorld(PLUGIN.getConfiguration().getStringValue("world-name")).getSpawnLocation();
+		spawn = Bukkit.getWorld(PLUGIN.getConfiguration().getString("world-name")).getSpawnLocation();
 		
 		status = Status.INITIALIZED;
 	}
@@ -77,7 +77,7 @@ public class GameManager {
 
 		spawn.getWorld().setTime(0);
 		
-		if(PLUGIN.getConfiguration().getBooleanValue("remove-piglin-brute")) {
+		if(PLUGIN.getConfiguration().getBoolean("remove-piglin-brute")) {
 			PIGLIN_REMOVE = new BukkitRunnable() {
 				@Override
 				public void run() {

@@ -24,11 +24,11 @@ public class Config {
 		return this.booleanValues;
 	}
 	
-	public String getStringValue(String key) {
+	public String getString(String key) {
 		return stringValues.get(key);
 	}
 	
-	public boolean getBooleanValue(String key) {
+	public boolean getBoolean(String key) {
 		return booleanValues.get(key);
 	}
 }

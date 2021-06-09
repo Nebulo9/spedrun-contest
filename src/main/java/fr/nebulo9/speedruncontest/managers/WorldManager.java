@@ -30,7 +30,7 @@ public class WorldManager {
 	}
 	
 	public void setup() {
-		this.gameWorld = PLUGIN.getServer().getWorld(PLUGIN.getConfiguration().getStringValue("world-name"));
+		this.gameWorld = PLUGIN.getServer().getWorld(PLUGIN.getConfiguration().getString("world-name"));
 		lobbyLoc = new Location(null,0.5d,60.5d,0.5d,0f,0f);
 	}
 	
@@ -86,9 +86,9 @@ public class WorldManager {
 	}
 	
 	public World createGameWorld() {
-		String worldName = PLUGIN.getConfiguration().getStringValue("world-name");
-		String netherName = PLUGIN.getConfiguration().getStringValue("world-name-nether");
-		String endName = PLUGIN.getConfiguration().getStringValue("world-name-end");
+		String worldName = PLUGIN.getConfiguration().getString("world-name");
+		String netherName = PLUGIN.getConfiguration().getString("world-name-nether");
+		String endName = PLUGIN.getConfiguration().getString("world-name-end");
 		
 		World nether = Bukkit.getWorld(netherName);		
 		if(nether != null) {
@@ -119,7 +119,7 @@ public class WorldManager {
 			} catch (IOException e) {
 				e.printStackTrace();
 				
-				PLUGIN.getLogger().severe("Could not remove the \"" + PLUGIN.getConfiguration().getStringValue("world-name") + "\" folder. Using a random name then");
+				PLUGIN.getLogger().severe("Could not remove the \"" + PLUGIN.getConfiguration().getString("world-name") + "\" folder. Using a random name then");
 				
 				worldName += "_" + new Random().nextInt(100);
 			}

@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
-import org.bukkit.event.entity.PiglinBarterEvent;
 import org.bukkit.inventory.ItemStack;
 
 import fr.nebulo9.speedruncontest.SCPlugin;
@@ -22,7 +21,7 @@ public class DropListeners implements Listener{
 	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
-		if(PLUGIN.getConfiguration().getBooleanValue("melted-ores-drop")) {
+		if(PLUGIN.getConfiguration().getBoolean("melted-ores-drop")) {
 			if(event.getPlayer().getGameMode() == GameMode.SURVIVAL) {
 				replace(event);
 			}
@@ -31,7 +30,7 @@ public class DropListeners implements Listener{
 	
 	@EventHandler
 	public void onItemDrop(ItemSpawnEvent event) {
-		if(PLUGIN.getConfiguration().getBooleanValue("cooked-meats")) {
+		if(PLUGIN.getConfiguration().getBoolean("cooked-meats")) {
 			replace(event);
 		}
 	}
